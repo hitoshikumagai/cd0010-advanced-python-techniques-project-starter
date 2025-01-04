@@ -16,6 +16,7 @@ iterator.
 
 You'll edit this file in Tasks 3a and 3c.
 """
+
 import operator
 import itertools
 
@@ -38,6 +39,7 @@ class AttributeFilter:
     Concrete subclasses can override the `get` classmethod to provide custom
     behavior to fetch a desired attribute from the given `CloseApproach`.
     """
+    
     def __init__(self, op, value):
         """Construct a new `AttributeFilter` from an binary predicate and a reference value.
 
@@ -76,35 +78,91 @@ class AttributeFilter:
         raise UnsupportedCriterionError
 
     def __repr__(self):
+        """Return a string representation of the filter.
+    
+        :return: A string representation of the filter including the operator and value
+        """
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
 class DateFilter(AttributeFilter):
+    """Filter that selects close approaches based on their dates.
+    
+    This filter is used to select close approaches that occur on specific dates
+    or within date ranges.
+    """
+    
     @classmethod
     def get(cls, approach):
+        """Get the date from a close approach.
+        
+        :param approach: A CloseApproach object
+        :return: The date of the close approach
+        """
         return approach.time.date()
 
 
 class DistanceFilter(AttributeFilter):
+    """Filter that selects close approaches based on their distances.
+    
+    This filter is used to select close approaches within specific distance ranges
+    from Earth.
+    """
+
     @classmethod
     def get(cls, approach):
+        """Get the distance from a close approach.
+        
+        :param approach: A CloseApproach object
+        :return: The distance of the close approach in astronomical units
+        """
         return approach.distance
 
 
 class VelocityFilter(AttributeFilter):
+    """Filter that selects close approaches based on their velocities.
+    
+    This filter is used to select close approaches within specific velocity ranges.
+    """
+
     @classmethod
     def get(cls, approach):
+        """Get the velocity from a close approach.
+        
+        :param approach: A CloseApproach object
+        :return: The velocity of the close approach in km/s
+        """
         return approach.velocity
 
 
 class DiameterFilter(AttributeFilter):
+    """Filter that selects close approaches based on NEO diameters.
+    
+    This filter is used to select close approaches of NEOs within specific diameter ranges.
+    """
+
     @classmethod
     def get(cls, approach):
+        """Get the NEO diameter from a close approach.
+        
+        :param approach: A CloseApproach object
+        :return: The diameter of the NEO in kilometers
+        """
         return approach.neo.diameter
 
 
 class HazardousFilter(AttributeFilter):
+    """Filter that selects close approaches based on their hazard status.
+    
+    This filter is used to select close approaches of NEOs that are potentially hazardous.
+    """
+    
     @classmethod
     def get(cls, approach):
+        """Get the hazardous status from a close approach's NEO.
+        
+        :param approach: A CloseApproach object
+        :return: Boolean indicating if the NEO is potentially hazardous
+        """
         return approach.neo.hazardous
 
 def create_filters(
